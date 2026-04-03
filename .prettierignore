@@ -1,0 +1,9 @@
+node_modules
+.next
+out
+build
+pnpm-lock.yaml
+src/generated
+AGENTS.md
+CLAUDE.md
+docker-compose.yml
