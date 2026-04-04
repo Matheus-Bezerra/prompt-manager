@@ -59,5 +59,21 @@ describe("Server Actions: Prompts", () => {
       expect(result.prompts).toBeUndefined();
       expect(result.message).toBe("Falha ao buscar prompts");
     });
+
+    it("should resolve successfully of the query also term is empty", async () => {
+      const input = [{ id: "1", title: "test", content: "test" }];
+      mockedSearchExecute.mockResolvedValue(input);
+
+      const formData = new FormData();
+      formData.set("q", "");
+
+      const result = await searchPromptAction(
+        { success: true, prompts: input },
+        formData,
+      );
+
+      expect(result.success).toBe(true);
+      expect(result.prompts).toEqual(input);
+    });
   });
 });

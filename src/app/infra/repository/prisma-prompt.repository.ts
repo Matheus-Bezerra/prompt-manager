@@ -2,7 +2,7 @@ import type { Prompt } from "@/core/domain/prompts/prompt.entity";
 import type { PromptRepository } from "@/core/domain/prompts/prompt.repository";
 import type { PrismaClient } from "@/generated/prisma/client";
 
-export class PrismaRepository implements PromptRepository {
+export class PrismaPromptRepository implements PromptRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
   async findMany(): Promise<Prompt[]> {

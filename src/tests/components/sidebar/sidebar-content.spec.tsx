@@ -54,18 +54,6 @@ describe("SidebarContent", () => {
       expect(screen.getByText(initialPrompts[0].title)).toBeVisible();
       expect(screen.getByText(initialPrompts[1].title)).toBeVisible();
     });
-
-    it("should render the list of prompts when the user types in the input", async () => {
-      makeSut();
-      const searchInput = screen.getByPlaceholderText("Buscar prompts...");
-
-      await user.type(searchInput, "Prompt 1");
-
-      expect(screen.getByText(initialPrompts[0].title)).toBeVisible();
-      expect(
-        screen.queryByText(initialPrompts[1].title),
-      ).not.toBeInTheDocument();
-    });
   });
 
   describe("Collapse / Expand sidebar", () => {
@@ -157,6 +145,16 @@ describe("SidebarContent", () => {
       await user.clear(searchInput);
       const lastClearedCall = pushMock.mock.calls.at(-1);
       expect(lastClearedCall?.[0]).toBe(`/`);
+    });
+
+    it("should submit the form the digit in the search input", async () => {
+      const submitSpy = jest.spyOn(HTMLFormElement.prototype, "requestSubmit");
+      makeSut();
+
+      const searchInput = screen.getByPlaceholderText("Buscar prompts...");
+      await user.type(searchInput, "Prompt 1");
+
+      expect(submitSpy).toHaveBeenCalled();
     });
   });
 

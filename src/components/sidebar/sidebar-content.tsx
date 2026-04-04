@@ -7,7 +7,13 @@ import {
   PlusIcon,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { startTransition, useActionState, useState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { searchPromptAction } from "@/app/actions/prompt.actions";
 import type { PromptSummary } from "@/core/domain/prompts/prompt.entity";
 import { Logo } from "../logo";
@@ -24,6 +30,8 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const formRef = useRef<HTMLFormElement>(null);
+
   const [searchState, searchAction, isPending] = useActionState(
     searchPromptAction,
     {
@@ -37,7 +45,7 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
 
   const hasQuery = query.trim().length > 0;
-  const promptList = hasQuery ? (searchState.prompts ?? prompts) : prompts;
+  const promptList = hasQuery ? (searchState?.prompts ?? prompts) : prompts;
 
   const collapsedSidebar = () => setIsCollapsed(true);
   const expandSidebar = () => setIsCollapsed(false);
@@ -62,6 +70,12 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
       searchAction(formData);
     });
   };
+
+  useEffect(() => {
+    if (!hasQuery) return;
+
+    formRef.current?.requestSubmit();
+  }, [hasQuery]);
 
   return (
     <div>
@@ -125,7 +139,11 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
               </div>
 
               <section className="mb-5">
-                <form action={searchAction} className="relative group w-full">
+                <form
+                  ref={formRef}
+                  action={searchAction}
+                  className="relative group w-full"
+                >
                   <Input
                     type="text"
                     name="q"

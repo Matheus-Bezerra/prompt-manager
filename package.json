@@ -14,7 +14,8 @@
     "format": "biome format --write .",
     "check": "biome check --write .",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.0.0",

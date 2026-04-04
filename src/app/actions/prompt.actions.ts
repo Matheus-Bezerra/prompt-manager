@@ -3,7 +3,7 @@
 import { SearchPromptsUseCase } from "@/core/application/prompts/search-prompts.use-case";
 import type { PromptSummary } from "@/core/domain/prompts/prompt.entity";
 import { prisma } from "@/lib/prisma";
-import { PrismaRepository } from "../infra/repository/prisma.repository";
+import { PrismaPromptRepository } from "../infra/repository/prisma-prompt.repository";
 
 type SearchFormState = {
   success: boolean;
@@ -17,7 +17,7 @@ export async function searchPromptAction(
 ): Promise<SearchFormState> {
   const term = String(formdata.get("q") ?? "").trim();
 
-  const repository = new PrismaRepository(prisma);
+  const repository = new PrismaPromptRepository(prisma);
   const useCase = new SearchPromptsUseCase(repository);
 
   try {
