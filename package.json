@@ -7,6 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check . && eslint .",
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate",
+    "db:seed": "prisma db seed",
+    "db:migrate": "prisma migrate dev",
     "format": "biome format --write .",
     "check": "biome check --write .",
     "test": "jest",
@@ -30,6 +34,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.10",
+    "@faker-js/faker": "^10.4.0",
     "@prisma/config": "^7.0.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
@@ -50,6 +55,7 @@
     "prisma": "^7.0.0",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
