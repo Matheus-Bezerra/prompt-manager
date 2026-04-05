@@ -28,6 +28,9 @@ describe("SearchPromptsUseCase", () => {
           prompt.title.toLowerCase().includes(term.toLowerCase()) ||
           prompt.content.toLowerCase().includes(term.toLowerCase()),
       ),
+    findByTitle: async (title) =>
+      Promise.resolve(input.find((prompt) => prompt.title === title) ?? null),
+    create: async () => Promise.resolve(undefined),
   };
 
   it("should return all prompts when term is empty", async () => {
