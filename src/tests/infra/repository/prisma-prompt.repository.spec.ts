@@ -5,6 +5,8 @@ function createMockPrisma() {
   return {
     prompt: {
       findMany: jest.fn(),
+      findUnique: jest.fn(),
+      create: jest.fn(),
     },
   };
 }
@@ -19,6 +21,43 @@ describe("PrismaPromptRepository", () => {
   });
 
   const now = new Date();
+
+  describe("create", () => {
+    it("should create a prompt", async () => {
+      const input = {
+        id: "1",
+        title: "Prompt 1",
+        content: "Content 1",
+      };
+
+      prisma.prompt.create.mockResolvedValue(input);
+
+      await repository.create(input);
+
+      expect(prisma.prompt.create).toHaveBeenCalledWith({
+        data: input,
+      });
+    });
+  });
+
+  describe("findByTitle", () => {
+    it("should return a prompt by title", async () => {
+      const input = {
+        id: "1",
+        title: "Prompt 1",
+        content: "Content 1",
+      };
+
+      prisma.prompt.findUnique.mockResolvedValue(input);
+
+      const result = await repository.findByTitle(input.title);
+
+      expect(result).toEqual(input);
+      expect(prisma.prompt.findUnique).toHaveBeenCalledWith({
+        where: { title: input.title },
+      });
+    });
+  });
 
   describe("findMany", () => {
     it("should return all prompts and order by createdAt descending", async () => {

@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -21,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-gray-900 text-white">
+      <body className="min-h-full flex bg-gray-900 text-white">
         <Sidebar />
 
         <main className="relative flex-1 overflow-auto min-w-0">
@@ -29,6 +30,8 @@ export default function RootLayout({
             {children}
           </div>
         </main>
+
+        <Toaster position="top-right" />
       </body>
     </html>
   );

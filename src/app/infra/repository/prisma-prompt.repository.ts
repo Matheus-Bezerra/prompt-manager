@@ -1,3 +1,4 @@
+import type { CreatePromptDTO } from "@/core/application/prompts/create-prompt.dto";
 import type { Prompt } from "@/core/domain/prompts/prompt.entity";
 import type { PromptRepository } from "@/core/domain/prompts/prompt.repository";
 import type { PrismaClient } from "@/generated/prisma/client";
@@ -10,6 +11,12 @@ export class PrismaPromptRepository implements PromptRepository {
       orderBy: {
         createdAt: "desc",
       },
+    });
+  }
+
+  async findByTitle(title: string): Promise<Prompt | null> {
+    return this.prisma.prompt.findUnique({
+      where: { title },
     });
   }
 
@@ -31,5 +38,9 @@ export class PrismaPromptRepository implements PromptRepository {
     });
 
     return prompts;
+  }
+
+  async create(data: CreatePromptDTO): Promise<void> {
+    await this.prisma.prompt.create({ data });
   }
 }
