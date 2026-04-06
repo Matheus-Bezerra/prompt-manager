@@ -1,4 +1,6 @@
 import { faker } from "@faker-js/faker";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@/generated/prisma/client";
 
@@ -49,7 +51,14 @@ async function main() {
   await seedDatabase();
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+const entryPath = process.argv[1];
+const thisFile = fileURLToPath(import.meta.url);
+const isMainModule =
+  entryPath !== undefined && resolve(entryPath) === resolve(thisFile);
+
+if (isMainModule) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
