@@ -58,6 +58,11 @@ export const PromptForm = ({ prompt }: PromptFormProps) => {
     }
 
     toast.success(result.message);
+
+    if (!isEdit) {
+      form.reset({ title: "", content: "" });
+    }
+
     router.refresh();
   };
 

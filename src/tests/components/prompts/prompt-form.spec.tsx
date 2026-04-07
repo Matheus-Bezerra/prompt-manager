@@ -90,6 +90,10 @@ describe("PromptForm", () => {
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith("Prompt criado com sucesso");
       });
+      expect(screen.getByPlaceholderText("Título do prompt")).toHaveValue("");
+      expect(
+        screen.getByPlaceholderText("Digite o conteúdo do prompt"),
+      ).toHaveValue("");
       expect(refreshMock).toHaveBeenCalledTimes(1);
     });
 
