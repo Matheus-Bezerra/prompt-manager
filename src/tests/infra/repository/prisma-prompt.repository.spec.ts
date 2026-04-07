@@ -8,6 +8,7 @@ function createMockPrisma() {
       findUnique: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
+      delete: jest.fn(),
     },
   };
 }
@@ -118,6 +119,18 @@ describe("PrismaPromptRepository", () => {
       expect(prisma.prompt.update).toHaveBeenCalledWith({
         where: { id: "1" },
         data: { title: "Only title" },
+      });
+    });
+  });
+
+  describe("delete", () => {
+    it("should delete a prompt by id", async () => {
+      prisma.prompt.delete.mockResolvedValue(undefined);
+
+      await repository.delete("1");
+
+      expect(prisma.prompt.delete).toHaveBeenCalledWith({
+        where: { id: "1" },
       });
     });
   });

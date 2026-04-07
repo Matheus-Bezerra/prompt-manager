@@ -57,4 +57,10 @@ export class PrismaPromptRepository implements PromptRepository {
       data,
     });
   }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.prompt.delete({
+      where: { id },
+    });
+  }
 }

@@ -9,4 +9,5 @@ export interface PromptRepository {
   searchMany(term: string): Promise<Prompt[]>;
   create(data: CreatePromptDTO): Promise<void>;
   update(id: string, data: Partial<UpdatePromptDTO>): Promise<Prompt>;
+  delete(id: string): Promise<void>;
 }

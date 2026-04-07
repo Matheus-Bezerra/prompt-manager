@@ -10,6 +10,7 @@ const makeRepository = (overrides: Partial<PromptRepository>) => {
     searchMany: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
+    delete: jest.fn(),
   };
 
   return {

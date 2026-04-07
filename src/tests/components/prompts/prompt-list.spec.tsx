@@ -1,4 +1,15 @@
 import { render, screen } from "@testing-library/react";
+
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({
+    refresh: jest.fn(),
+  }),
+}));
+
+jest.mock("@/app/actions/prompt.actions", () => ({
+  deletePromptAction: jest.fn(),
+}));
+
 import {
   PromptList,
   type PromptListProps,

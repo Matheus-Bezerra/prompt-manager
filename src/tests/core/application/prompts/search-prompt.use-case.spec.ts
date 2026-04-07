@@ -43,6 +43,7 @@ describe("SearchPromptsUseCase", () => {
           updatedAt: new Date(),
         },
       ),
+    delete: async () => Promise.resolve(undefined),
   };
 
   it("should return all prompts when term is empty", async () => {

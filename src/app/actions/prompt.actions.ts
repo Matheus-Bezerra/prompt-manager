@@ -7,6 +7,8 @@ import {
 } from "@/core/application/prompts/create-prompt.dto";
 import { CreatePromptUseCase } from "@/core/application/prompts/create-prompt.use-case";
 import { SearchPromptsUseCase } from "@/core/application/prompts/search-prompts.use-case";
+import { deletePromptSchema } from "@/core/application/prompts/delete-prompt.dto";
+import { DeletePromptUseCase } from "@/core/application/prompts/delete-prompt.use-case";
 import {
   type UpdatePromptDTO,
   updatePromptSchema,
@@ -85,7 +87,7 @@ export async function updatePromptAction(
   try {
     const repository = new PrismaPromptRepository(prisma);
     const useCase = new UpdatePromptUseCase(repository);
-    const prompt = await useCase.execute(validated.data);
+    await useCase.execute(validated.data);
 
     return {
       success: true,
@@ -108,7 +110,7 @@ export async function updatePromptAction(
 }
 
 export async function searchPromptAction(
-  prev: SearchFormState,
+  _prev: SearchFormState,
   formdata: FormData,
 ): Promise<SearchFormState> {
   const term = String(formdata.get("q") ?? "").trim();
@@ -129,10 +131,47 @@ export async function searchPromptAction(
       success: true,
       prompts: summaries,
     };
-  } catch (_) {
+  } catch {
     return {
       success: false,
       message: "Falha ao buscar prompts",
+    };
+  }
+}
+
+export async function deletePromptAction(id: string): Promise<FormState> {
+  const validated = deletePromptSchema.safeParse({ id });
+
+  if (!validated.success) {
+    const { fieldErrors } = z.flattenError(validated.error);
+    return {
+      success: false,
+      message: "Erro de validação",
+      errors: fieldErrors,
+    };
+  }
+
+  try {
+    const repository = new PrismaPromptRepository(prisma);
+    const useCase = new DeletePromptUseCase(repository);
+    await useCase.execute(validated.data);
+
+    return {
+      success: true,
+      message: "Prompt removido com sucesso",
+    };
+  } catch (error) {
+    const _error = error as Error;
+    if (_error.message === "PROMPT_NOT_FOUND") {
+      return {
+        success: false,
+        message: "Prompt não encontrado",
+      };
+    }
+
+    return {
+      success: false,
+      message: "Falha ao remover prompt",
     };
   }
 }
