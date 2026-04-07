@@ -158,6 +158,32 @@ describe("SidebarContent", () => {
     });
   });
 
+  describe("SidebarContent - Mobile", () => {
+    it("should render the mobile menu button and open the mobile menu when clicked and close the mobile menu when the close mobile button is clicked", async () => {
+      makeSut();
+      const mobileMenuButton = screen.getByRole("button", {
+        name: /abrir menu/i,
+      });
+      await user.click(mobileMenuButton);
+
+      expect(mobileMenuButton).toBeVisible();
+      expect(mobileMenuButton).toHaveAttribute("aria-expanded", "true");
+
+      const sidebarContent = screen.getByRole("complementary", {
+        name: /sidebar content/i,
+      });
+      expect(sidebarContent).toHaveClass("translate-x-0");
+
+      const closeMobileButton = screen.getByRole("button", {
+        name: /fechar menu/i,
+      });
+      await user.click(closeMobileButton);
+
+      expect(mobileMenuButton).toHaveAttribute("aria-expanded", "false");
+      expect(sidebarContent).toHaveClass("-translate-x-full");
+    });
+  });
+
   it("Should initialize field search with search param", () => {
     const text = "inicial";
     mockSearchParams.set("q", text);

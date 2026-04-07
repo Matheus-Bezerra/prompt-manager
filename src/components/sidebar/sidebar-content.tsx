@@ -4,6 +4,7 @@ import {
   ArrowLeftToLine,
   ArrowRightToLine,
   X as CloseButton,
+  MenuIcon,
   PlusIcon,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -79,8 +80,20 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
 
   return (
     <div>
+      <Button
+        className="md:hidden fixed top-6 left-6 z-50"
+        variant="secondary"
+        title="Abrir menu"
+        aria-label="Abrir menu"
+        aria-expanded={isMobileOpen}
+        onClick={openMobile}
+      >
+        <MenuIcon className="w-5 h-5 text-gray-100" />
+      </Button>
+
       <aside
-        className={`border-r border-gray-700 flex flex-col h-full bg-gray-800 transition-[transform,width] duration-300 ease-in-out fixed md:relative left-0 top-0 z-50 md:z-auto w-[80vw] sm:w-[320px] ${isCollapsed ? "md:w-[72px]" : "md:w-[384px]"}`}
+        aria-label="Sidebar content"
+        className={`border-r border-gray-700 flex flex-col h-full bg-gray-800 transition-[transform,width] duration-300 ease-in-out fixed md:relative left-0 top-0 z-50 md:z-auto w-[80vw] sm:w-[320px] ${isCollapsed ? "md:w-[72px]" : "md:w-[384px]"} ${isMobileOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         {isCollapsed && (
           <section className="px-2 py-6">
@@ -117,6 +130,7 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
                     variant="secondary"
                     aria-label="Fechar menu"
                     title="Fechar menu"
+                    onClick={closeMobile}
                   >
                     <CloseButton className="w-5 h-5 text-gray-100" />
                   </Button>
