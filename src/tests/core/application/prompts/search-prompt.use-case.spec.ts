@@ -21,6 +21,8 @@ describe("SearchPromptsUseCase", () => {
   ];
 
   const repository: PromptRepository = {
+    findById: async (id) =>
+      Promise.resolve(input.find((prompt) => prompt.id === id) ?? null),
     findMany: async () => input,
     searchMany: async (term) =>
       input.filter(
@@ -31,6 +33,16 @@ describe("SearchPromptsUseCase", () => {
     findByTitle: async (title) =>
       Promise.resolve(input.find((prompt) => prompt.title === title) ?? null),
     create: async () => Promise.resolve(undefined),
+    update: async (id, data) =>
+      Promise.resolve(
+        input.find((prompt) => prompt.id === id) ?? {
+          id,
+          title: data.title ?? "",
+          content: data.content ?? "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ),
   };
 
   it("should return all prompts when term is empty", async () => {

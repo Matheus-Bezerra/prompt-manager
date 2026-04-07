@@ -4,11 +4,15 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { createPromptAction } from "@/app/actions/prompt.actions";
+import {
+  createPromptAction,
+  updatePromptAction,
+} from "@/app/actions/prompt.actions";
 import {
   type CreatePromptDTO,
   createPromptSchema,
 } from "@/core/application/prompts/create-prompt.dto";
+import type { Prompt } from "@/core/domain/prompts/prompt.entity";
 import { CopyButton } from "../button-actions";
 import { Button } from "../ui/button";
 import {
@@ -21,21 +25,32 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
-export const PromptForm = () => {
+export type PromptFormProps = {
+  prompt?: Prompt | null;
+};
+
+export const PromptForm = ({ prompt }: PromptFormProps) => {
   const router = useRouter();
 
   const form = useForm<CreatePromptDTO>({
     resolver: standardSchemaResolver(createPromptSchema),
     defaultValues: {
-      title: "",
-      content: "",
+      title: prompt?.title || "",
+      content: prompt?.content || "",
     },
   });
 
   const content = useWatch({ control: form.control, name: "content" });
 
+  const isEdit = !!prompt?.id;
+
   const submit = async (data: CreatePromptDTO) => {
-    const result = await createPromptAction(data);
+    const result = isEdit
+      ? await updatePromptAction({
+          id: prompt.id,
+          ...data,
+        })
+      : await createPromptAction(data);
 
     if (!result?.success) {
       toast.error(result.message);

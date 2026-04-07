@@ -6,10 +6,14 @@ const BASE_URL = `http://localhost:${PORT}`;
 export default defineConfig({
   testDir: "./e2e",
   globalSetup: "./e2e/global-setup.ts",
-  fullyParallel: true,
+  /**
+   * Um único banco compartilhado: evita corridas entre arquivos e projects
+   * (beforeAll que limpa / cria dados).
+   */
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   expect: { timeout: process.env.CI ? 15000 : 5000 },
   reporter: "html",
   use: {

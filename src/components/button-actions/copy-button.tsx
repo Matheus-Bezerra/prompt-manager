@@ -59,6 +59,8 @@ export const CopyButton = ({ content }: CopyButtonProps) => {
       className="disabled:opacity-50 disabled:cursor-not-allowed"
       disabled={isContentEmpty}
       onClick={handleCopy}
+      aria-label="Copiar conteúdo"
+      title="Copiar conteúdo"
     >
       {isCopied ? (
         <CheckIcon className="w-4 h-4 text-green-400" />
