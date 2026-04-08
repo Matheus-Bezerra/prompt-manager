@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import {
   SidebarContent,
   type SidebarContentProps,
@@ -17,6 +18,21 @@ jest.mock("next/navigation", () => ({
 
 jest.mock("@/app/actions/prompt.actions", () => ({
   searchPromptAction: jest.fn(),
+}));
+
+const setQueryMock = jest.fn();
+
+jest.mock("nuqs", () => ({
+  useQueryState: (key: string) => {
+    const [value, setValue] = useState(mockSearchParams.get(key) ?? "");
+
+    const setQuery = (nextValue: string) => {
+      setQueryMock(nextValue);
+      setValue(nextValue);
+    };
+
+    return [value, setQuery] as const;
+  },
 }));
 
 const initialPrompts = [
@@ -142,13 +158,9 @@ describe("SidebarContent", () => {
       const searchInput = screen.getByPlaceholderText("Buscar prompts...");
       await user.type(searchInput, text);
 
-      expect(pushMock).toHaveBeenCalled();
-      const lastCall = pushMock.mock.calls.at(-1);
-      expect(lastCall?.[0]).toBe(`/?q=A%20B`);
-
+      expect(setQueryMock).toHaveBeenCalledWith(text);
       await user.clear(searchInput);
-      const lastClearedCall = pushMock.mock.calls.at(-1);
-      expect(lastClearedCall?.[0]).toBe(`/`);
+      expect(setQueryMock).toHaveBeenCalledWith("");
     });
 
     it("should submit the form the digit in the search input", async () => {
