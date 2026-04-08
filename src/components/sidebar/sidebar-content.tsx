@@ -8,7 +8,8 @@ import {
   PlusIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useQueryState } from "nuqs";
 import {
   startTransition,
   useActionState,
@@ -32,7 +33,6 @@ const fadeTransition = { duration: 0.2, delay: 0.1 };
 
 export const SidebarContent = ({ prompts }: SidebarContentProps) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -46,7 +46,7 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [query, setQuery] = useState(searchParams.get("q") ?? "");
+  const [query, setQuery] = useQueryState("q", { defaultValue: "" });
 
   const hasQuery = query.trim().length > 0;
   const promptList = hasQuery ? (searchState?.prompts ?? prompts) : prompts;
@@ -64,10 +64,7 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
     setQuery(newValueQuery);
 
     startTransition(() => {
-      const url = newValueQuery
-        ? `/?q=${encodeURIComponent(newValueQuery)}`
-        : "/";
-      router.push(url, { scroll: false });
+      setQuery(newValueQuery);
 
       const formData = new FormData();
       formData.set("q", newValueQuery);
