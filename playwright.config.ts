@@ -7,7 +7,9 @@ const PORT = process.env.PORT ?? "3000";
 const BASE_URL = `http://localhost:${PORT}`;
 const databaseUrl = process.env.DATABASE_URL?.trim();
 if (!databaseUrl) {
-  throw new Error("[E2E] DATABASE_URL ausente após loadE2eEnv — verifique load-e2e-env.");
+  throw new Error(
+    "[E2E] DATABASE_URL ausente após loadE2eEnv — verifique load-e2e-env.",
+  );
 }
 
 export default defineConfig({

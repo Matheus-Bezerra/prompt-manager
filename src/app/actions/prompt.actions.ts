@@ -1,14 +1,15 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import z from "zod";
 import {
   type CreatePromptDTO,
   createPromptSchema,
 } from "@/core/application/prompts/create-prompt.dto";
 import { CreatePromptUseCase } from "@/core/application/prompts/create-prompt.use-case";
-import { SearchPromptsUseCase } from "@/core/application/prompts/search-prompts.use-case";
 import { deletePromptSchema } from "@/core/application/prompts/delete-prompt.dto";
 import { DeletePromptUseCase } from "@/core/application/prompts/delete-prompt.use-case";
+import { SearchPromptsUseCase } from "@/core/application/prompts/search-prompts.use-case";
 import {
   type UpdatePromptDTO,
   updatePromptSchema,
@@ -50,6 +51,8 @@ export async function createPromptAction(
     const useCase = new CreatePromptUseCase(repository);
     await useCase.execute(validated.data);
 
+    revalidatePath("/", "layout");
+
     return {
       success: true,
       message: "Prompt criado com sucesso",
@@ -88,6 +91,8 @@ export async function updatePromptAction(
     const repository = new PrismaPromptRepository(prisma);
     const useCase = new UpdatePromptUseCase(repository);
     await useCase.execute(validated.data);
+
+    revalidatePath("/", "layout");
 
     return {
       success: true,
@@ -155,6 +160,8 @@ export async function deletePromptAction(id: string): Promise<FormState> {
     const repository = new PrismaPromptRepository(prisma);
     const useCase = new DeletePromptUseCase(repository);
     await useCase.execute(validated.data);
+
+    revalidatePath("/", "layout");
 
     return {
       success: true,
