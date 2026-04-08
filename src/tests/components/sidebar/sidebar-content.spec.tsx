@@ -51,8 +51,12 @@ describe("SidebarContent", () => {
     it("should render the list of prompts", () => {
       makeSut();
 
-      expect(screen.getByText(initialPrompts[0].title)).toBeVisible();
-      expect(screen.getByText(initialPrompts[1].title)).toBeVisible();
+      expect(
+        screen.getByRole("heading", { name: initialPrompts[0].title }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: initialPrompts[1].title }),
+      ).toBeInTheDocument();
     });
   });
 
