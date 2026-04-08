@@ -1,7 +1,14 @@
 import { defineConfig, devices } from "@playwright/test";
+import { loadE2eEnv } from "./e2e/load-e2e-env";
+
+loadE2eEnv();
 
 const PORT = process.env.PORT ?? "3000";
 const BASE_URL = `http://localhost:${PORT}`;
+const databaseUrl = process.env.DATABASE_URL?.trim();
+if (!databaseUrl) {
+  throw new Error("[E2E] DATABASE_URL ausente após loadE2eEnv — verifique load-e2e-env.");
+}
 
 export default defineConfig({
   testDir: "./e2e",
@@ -38,9 +45,7 @@ export default defineConfig({
     timeout: 180 * 1000,
     env: {
       PORT,
-      ...(process.env.DATABASE_URL
-        ? { DATABASE_URL: process.env.DATABASE_URL }
-        : {}),
+      DATABASE_URL: databaseUrl,
     },
   },
 });

@@ -1,24 +1,17 @@
-import { existsSync } from "node:fs";
-import { resolve } from "node:path";
-import { config as dotenvConfig } from "dotenv";
+import { loadE2eEnv } from "./load-e2e-env";
+import { runPrismaMigrateDeploy } from "./run-prisma-migrate-deploy";
 import { runTsxScript } from "./run-tsx-script";
 
 async function globalSetup() {
-  if (!process.env.CI) {
-    const root = process.cwd();
-    const envPath = resolve(root, ".env");
-    const envExamplePath = resolve(root, ".env.example");
-    if (existsSync(envPath)) {
-      dotenvConfig({ path: envPath });
-    } else if (existsSync(envExamplePath)) {
-      dotenvConfig({ path: envExamplePath });
-    }
-  }
+  loadE2eEnv();
 
-  const url = process.env.DATABASE_URL;
-  if (!url || typeof url !== "string" || url.trim().length === 0) {
-    console.warn("[E2E] Seed ignorado: DATABASE_URL ausente ou inválida.");
-    return;
+  try {
+    console.log("[E2E] Aplicando migrações (prisma migrate deploy)…");
+    await runPrismaMigrateDeploy();
+  } catch (error) {
+    const _error = error as Error;
+    console.error(`[E2E] migrate deploy falhou: ${_error.message}`);
+    throw error;
   }
 
   try {
