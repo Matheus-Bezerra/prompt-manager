@@ -111,3 +111,28 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Lista da sidebar: barra fina, tom de cinza (evita trilho branco padrão do SO) */
+@layer utilities {
+  .scrollbar-sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gray-200) transparent;
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, var(--gray-100) 55%, transparent);
+    border-radius: 9999px;
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--gray-100);
+  }
+}

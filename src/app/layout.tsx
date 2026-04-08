@@ -23,16 +23,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex bg-gray-900 text-white">
-        <NuqsAdapter>
-          <Sidebar />
-        </NuqsAdapter>
+      <body className="flex h-dvh min-h-0 flex-col overflow-hidden bg-gray-900 text-white">
+        <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden">
+          <NuqsAdapter>
+            <Sidebar />
+          </NuqsAdapter>
 
-        <main className="relative flex-1 overflow-auto min-w-0">
-          <div className="p-4 sm:p-6 md:p-8 max-w-full md:max-w-3xl mx-auto h-full">
-            {children}
-          </div>
-        </main>
+          <main className="relative min-h-0 min-w-0 flex-1 overflow-auto">
+            <div className="mx-auto h-full max-w-full p-4 sm:p-6 md:max-w-3xl md:p-8">
+              {children}
+            </div>
+          </main>
+        </div>
 
         <Toaster position="top-right" />
       </body>

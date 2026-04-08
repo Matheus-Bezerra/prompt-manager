@@ -79,7 +79,7 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
   }, [hasQuery]);
 
   return (
-    <div>
+    <div className="flex h-full min-h-0 shrink-0">
       <Button
         className="md:hidden fixed top-6 left-6 z-50"
         variant="secondary"
@@ -93,7 +93,7 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
 
       <motion.aside
         aria-label="Sidebar content"
-        className={`border-r border-gray-700 flex flex-col h-full bg-gray-800 transition-[transform,width] duration-300 ease-in-out fixed md:relative left-0 top-0 z-50 md:z-auto w-[80vw] sm:w-[320px] ${isCollapsed ? "md:w-[72px]" : "md:w-[384px]"} ${isMobileOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+        className={`fixed left-0 top-0 z-50 flex h-dvh max-h-dvh min-h-0 w-[80vw] flex-col overflow-hidden border-r border-gray-700 bg-gray-800 transition-[transform,width] duration-300 ease-in-out sm:w-[320px] md:relative md:z-auto md:h-full md:max-h-none ${isCollapsed ? "md:w-[72px]" : "md:w-[384px]"} ${isMobileOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
         initial={false}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
@@ -129,8 +129,8 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
         )}
 
         {!isCollapsed && (
-          <div>
-            <section className="p-6">
+          <div className="flex min-h-0 flex-1 flex-col">
+            <section className="shrink-0 p-6">
               <div className="md:hidden p-4">
                 <div className="flex items-center justify-between">
                   <Button
@@ -204,7 +204,7 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
             </section>
 
             <motion.nav
-              className="flex-1 overflow-y-auto px-6 pb-6"
+              className="scrollbar-sidebar min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pb-6"
               aria-label="Lista de prompts"
               initial={false}
               animate={{ opacity: 1 }}
